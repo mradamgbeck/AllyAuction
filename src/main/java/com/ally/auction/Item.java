@@ -9,10 +9,10 @@ import javax.persistence.GenerationType;
 
 @Entity
 @Builder
+@Getter
 public class Item {
 
-    @Getter
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private final long id;
     private final String description;
 

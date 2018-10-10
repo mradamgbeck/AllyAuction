@@ -1,10 +1,16 @@
 package com.ally.auction.Services;
 
-import com.ally.auction.AuctionItem;
 import com.ally.auction.Bid;
+import com.ally.auction.Repositories.BidRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class BidService {
-    public AuctionItem makeBid(Bid bidToSave) {
-        return null;
+    @Autowired
+    AuctionItemService auctionItemService;
+    @Autowired
+    BidRepository bidRepository;
+
+    public long makeBid(Bid bidToSave) {
+        return bidRepository.save(bidToSave).getId();
     }
 }
