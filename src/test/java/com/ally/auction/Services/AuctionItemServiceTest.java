@@ -1,8 +1,8 @@
-package com.ally.auction.Controllers;
+package com.ally.auction.Services;
 
 import com.ally.auction.AuctionItem;
 import com.ally.auction.Item;
-import com.ally.auction.Services.AuctionItemService;
+import com.ally.auction.Repositories.AuctionItemRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,12 +17,12 @@ import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class AuctionItemControllerTest {
+public class AuctionItemServiceTest {
 
     @Mock
-    AuctionItemService auctionItemService;
+    AuctionItemRepository auctionItemRepository;
     @InjectMocks
-    AuctionItemController auctionItemController;
+    AuctionItemService auctionItemService;
     double reservePrice;
     Item itemToSave;
     AuctionItem auctionItemToSave;
@@ -48,23 +48,23 @@ public class AuctionItemControllerTest {
     }
 
     @Test
-    public void postAuctionItemSavesInRepository() {
-        when(auctionItemService.saveAuctionItem(auctionItemToSave)).thenReturn(returnedAuctionItem.getId());
-        long savedItemId = auctionItemController.saveAuctionItem(auctionItemToSave);
+    public void saveSavesInRepository() {
+        when(auctionItemRepository.save(auctionItemToSave)).thenReturn(returnedAuctionItem);
+        long savedItemId = auctionItemService.saveAuctionItem(auctionItemToSave);
         assertSame(returnedAuctionItem.getId(), savedItemId);
     }
 
     @Test
     public void getAuctionItemsCallsFindAllOnRepository() {
-        when(auctionItemService.getAuctionItems()).thenReturn(Arrays.asList(returnedAuctionItem));
-        Iterable<AuctionItem> auctionItems = auctionItemController.getAuctionItems();
+        when(auctionItemRepository.findAll()).thenReturn(Arrays.asList(returnedAuctionItem));
+        Iterable<AuctionItem> auctionItems = auctionItemService.getAuctionItems();
         assertSame(returnedAuctionItem, auctionItems.iterator().next());
     }
 
     @Test
     public void getAuctionItemCallsFindOneOnRepository() {
-        when(auctionItemService.getAuctionItem(returnedAuctionItem.getId())).thenReturn(Optional.of(returnedAuctionItem));
-        Optional<AuctionItem> auctionItemFromRepo = auctionItemController.getAuctionItem(returnedAuctionItem.getId());
+        when(auctionItemRepository.findById(returnedAuctionItem.getId())).thenReturn(Optional.of(returnedAuctionItem));
+        Optional<AuctionItem> auctionItemFromRepo = auctionItemService.getAuctionItem(returnedAuctionItem.getId());
         assertSame(returnedAuctionItem, auctionItemFromRepo.get());
     }
 }
