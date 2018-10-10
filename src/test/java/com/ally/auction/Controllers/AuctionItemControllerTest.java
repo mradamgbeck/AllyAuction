@@ -9,7 +9,10 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+
 import java.util.Arrays;
+import java.util.Optional;
+
 import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.when;
 
@@ -26,7 +29,7 @@ public class AuctionItemControllerTest {
     AuctionItem returnedAuctionItem;
 
     @Before
-    public void setup(){
+    public void setup() {
         reservePrice = 2.00;
         itemToSave = Item.builder()
                 .id(1L)
@@ -47,14 +50,21 @@ public class AuctionItemControllerTest {
     @Test
     public void postAuctionItemSavesInRepository() {
         when(auctionItemRepository.save(auctionItemToSave)).thenReturn(returnedAuctionItem);
-        AuctionItem savedItem = auctionItemController.saveAuctionItem(auctionItemToSave);
-        assertSame(returnedAuctionItem, savedItem);
+        long savedItemId = auctionItemController.saveAuctionItem(auctionItemToSave);
+        assertSame(returnedAuctionItem.getId(), savedItemId);
     }
 
     @Test
-    public void getAuctionItemsCallsFindAllOnRepository(){
+    public void getAuctionItemsCallsFindAllOnRepository() {
         when(auctionItemRepository.findAll()).thenReturn(Arrays.asList(returnedAuctionItem));
         Iterable<AuctionItem> auctionItems = auctionItemController.getAuctionItems();
-        assertSame(auctionItems.iterator().next(), returnedAuctionItem);
+        assertSame(returnedAuctionItem, auctionItems.iterator().next());
+    }
+
+    @Test
+    public void getAuctionItemCallsFindOneOnRepository() {
+        when(auctionItemRepository.findById(returnedAuctionItem.getId())).thenReturn(Optional.of(returnedAuctionItem));
+        Optional<AuctionItem> auctionItemFromRepo = auctionItemController.getAuctionItem(returnedAuctionItem.getId());
+        assertSame(returnedAuctionItem, auctionItemFromRepo.get());
     }
 }
