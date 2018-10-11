@@ -1,6 +1,7 @@
 package com.ally.auction.Controllers;
 
 import com.ally.auction.AuctionItem;
+import com.ally.auction.AuctionItemMessage;
 import com.ally.auction.Item;
 import com.ally.auction.Services.AuctionItemService;
 import org.junit.Before;
@@ -10,6 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -25,21 +27,21 @@ public class AuctionItemControllerTest {
     AuctionItemController auctionItemController;
     double reservePrice;
     Item itemToSave;
-    AuctionItem auctionItemToSave;
-    AuctionItem returnedAuctionItem;
+    AuctionItemMessage auctionItemToSave;
+    AuctionItemMessage returnedAuctionItem;
 
     @Before
     public void setup() {
         reservePrice = 2.00;
         itemToSave = Item.builder()
-                .id(1L)
+                .itemId("asdf")
                 .description("Something to auction")
                 .build();
-        auctionItemToSave = AuctionItem.builder()
+        auctionItemToSave = AuctionItemMessage.builder()
                 .reservePrice(reservePrice)
                 .item(itemToSave)
                 .build();
-        returnedAuctionItem = AuctionItem.builder()
+        returnedAuctionItem = AuctionItemMessage.builder()
                 .id(2L)
                 .currentBid(0.00)
                 .reservePrice(reservePrice)
@@ -56,15 +58,17 @@ public class AuctionItemControllerTest {
 
     @Test
     public void getAuctionItemsCallsFindAllOnRepository() {
-        when(auctionItemService.getAuctionItems()).thenReturn(Arrays.asList(returnedAuctionItem));
-        Iterable<AuctionItem> auctionItems = auctionItemController.getAuctionItems();
+        ArrayList<AuctionItemMessage> returnedList = new ArrayList<>();
+        returnedList.add(returnedAuctionItem);
+        when(auctionItemService.getAuctionItems()).thenReturn(returnedList);
+        ArrayList<AuctionItemMessage> auctionItems = auctionItemController.getAuctionItems();
         assertSame(returnedAuctionItem, auctionItems.iterator().next());
     }
 
     @Test
     public void getAuctionItemCallsFindOneOnRepository() {
-        when(auctionItemService.getAuctionItem(returnedAuctionItem.getId())).thenReturn(Optional.of(returnedAuctionItem));
-        Optional<AuctionItem> auctionItemFromRepo = auctionItemController.getAuctionItem(returnedAuctionItem.getId());
-        assertSame(returnedAuctionItem, auctionItemFromRepo.get());
+        when(auctionItemService.getAuctionItem(returnedAuctionItem.getId())).thenReturn(returnedAuctionItem);
+        AuctionItemMessage auctionItemFromRepo = auctionItemController.getAuctionItem(returnedAuctionItem.getId());
+        assertSame(returnedAuctionItem, auctionItemFromRepo);
     }
 }

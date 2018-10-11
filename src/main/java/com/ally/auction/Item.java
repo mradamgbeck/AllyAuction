@@ -1,23 +1,19 @@
 package com.ally.auction;
 
 import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 @Entity
 @Builder
-@Getter
+@Data
 public class Item {
-
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private final long id;
+    @Id
+    private final String itemId;
     private final String description;
-
-    public Item(long id, String description) {
-        this.id = id;
-        this.description = description;
-    }
 }

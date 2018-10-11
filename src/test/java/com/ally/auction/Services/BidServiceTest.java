@@ -39,4 +39,9 @@ public class BidServiceTest {
         long savedBidId = bidService.makeBid(bidToMake);
         assertSame(bidReturnedFromRepo.getId(), savedBidId);
     }
+
+    @Test
+    public void makeBidSetsCurrentBidOfAuctionItemToMaxOfCurrentBidOrAutoBidAmount_IfReservePriceHasNotBeenMet(){
+
+    }
 }
