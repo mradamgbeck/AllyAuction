@@ -15,8 +15,8 @@ import javax.persistence.Id;
 public class Bid {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private final long id;
-    private final long auctionItemId;
+    private final Long id;
+    private final Long auctionItemId;
     private final double maxAutoBidAmount;
     private final String bidderName;
 }

@@ -26,7 +26,7 @@ public class AuctionItemController {
     }
 
     @RequestMapping(value = "/auctionItems/{itemId}", method = RequestMethod.GET)
-    public AuctionItemMessage getAuctionItem(@PathParam(value = "itemId") long id) {
+    public AuctionItemMessage getAuctionItem(@PathVariable(value = "itemId") Long id) {
         return auctionItemService.getAuctionItem(id);
     }
 }

@@ -12,7 +12,7 @@ public class AuctionItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long id;
     private double currentBid;
     private double reservePrice;
     @OneToOne(cascade=CascadeType.PERSIST)
